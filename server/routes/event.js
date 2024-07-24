@@ -11,11 +11,11 @@ const { getEvent, createEvent, updateEvent, deleteEvent } = require("../controll
 
 
 //Get Events
-router.get('/', getEvent);
+router.post('/get', getEvent);
 
 
 //Post Events
-router.post('/', auth, createEvent);
+router.post('/', createEvent);
 
 
 //Update Events

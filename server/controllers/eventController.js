@@ -1,27 +1,31 @@
 const Event = require('../models/EventModel');
+const jwtDecode = require('jwt-decode');
 
 exports.getEvent = async (req, res) => {
   try {
-    const events = await Event.find({ user: req.user.id });
-    res.json(events);
-  } catch (err) {
+      if(req.body.user){
+        const events = await Event.find({ user: req.body.user.id });
+        res.json(events);
+      }
+      
+    }
+    catch (err) {
     console.log(err);
     res.status(500).json("Internal Server error");
   }
-};
+} 
 
 exports.createEvent = async (req, res) => {
   const { title, description, date } = req.body;
-  console.log(req.user.id);
   try {
     const newEvent = await Event.create({
       title: title,
       description: description,
       date: date,
-      user: req.user.id
-
+      user: req.body.user.id,
     })
     res.json(newEvent);
+
   } catch (err) {
     console.log(err);
     res.status(500).json("Internal Server error");

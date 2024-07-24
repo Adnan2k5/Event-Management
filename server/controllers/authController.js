@@ -19,14 +19,14 @@ exports.register = async (req, res) => {
         password: hash,
       });
       console.log(result.id);
-      const payload = { user: { id: result.id, name: result.name } };
+      const payload = {  id: result.id, name: result.name  };
       jwt.sign(payload, "event-management-2005", (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token , redirectUrl: '/login'});
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 };
 
@@ -35,18 +35,18 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({email: email });
     if (!user) {
-      res.status(401).json("Invalid Credentials");
+      res.status(400).json("Invalid Credentials");
     } else {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        res.status(401).json("Invalid Credentials");
+        res.status(400).json("Invalid Credentials");
       }
       const payload = {  id: user.id, name: user.name  };
       jwt.sign(payload, "event-management-2005", (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token , redirectUrl: '/'});
       });
     }
   } catch (err) {
